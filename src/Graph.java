@@ -49,7 +49,7 @@ public class Graph {
     }
 
     public void BFS(int startVertex) {
-         if(startVertex <= 0 || startVertex > this.V){
+        if (startVertex <= 0 || startVertex > this.V) {
             throw new Error("Start vertex should be a valid vertex");
         }
         Queue<Integer> check = new LinkedList<Integer>();
@@ -62,7 +62,7 @@ public class Graph {
             for (int i = 0; i < neighbors.size(); i++) {
                 int neighbor = neighbors.get(i);
                 if (!visited.contains(neighbor)) {
-                    visited.add(neighbor); 
+                    visited.add(neighbor);
                     check.add(neighbor);
                 }
             }
@@ -89,15 +89,15 @@ public class Graph {
         return n;
     }
 
-    public void DFS(int startVertex){
-        if(startVertex <= 0 || startVertex > this.V){
+    public void DFS(int startVertex) {
+        if (startVertex <= 0 || startVertex > this.V) {
             throw new Error("Start vertex should be a valid vertex");
         }
         Stack<Integer> s = new Stack<>();
         Set<Integer> visited = new HashSet<>();
         s.push(startVertex);
         visited.add(startVertex);
-        while(!s.isEmpty()){
+        while (!s.isEmpty()) {
             int currentVertex = s.pop();
             List<Integer> neighbors = this.getNeighbours(currentVertex);
             for (int i = 0; i < neighbors.size(); i++) {
@@ -108,6 +108,30 @@ public class Graph {
                 }
             }
             System.out.println("Processed : " + currentVertex);
+        }
+    }
+
+    private void dfsTC(int v1, int v2, int[][] TC) {
+        TC[v1][v2] = 1;
+        List<Integer> neighbors = this.getNeighbours(v2);
+        for (int i = 0; i < neighbors.size(); i++) {
+            int neighbor = neighbors.get(i);
+            if (TC[v1][neighbor] == 0) {
+                dfsTC(v1, neighbor, TC);
+            }
+        }
+    }
+
+    public void tClosure() {
+        int[][] TC = new int[this.V + 1][this.V + 1];
+        for (int i = 1; i < this.V + 1; i++) {
+            this.dfsTC(i, i, TC);
+        }
+        for(int i=1;i<=this.V;i++){
+            for(int j=1;j<=this.V;j++){
+                System.out.print(TC[i][j]);
+            }
+            System.out.println();
         }
     }
 }
